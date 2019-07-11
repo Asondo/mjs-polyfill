@@ -1,2 +1,2 @@
 # mjs-polyfill
-Mongoose os example project with standardization polyfill
+Mongoose OS example project with standardization polyfill

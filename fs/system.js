@@ -24,13 +24,13 @@ module.exports = {
     malloc: ffi('void *malloc(int)'),
     free: ffi('void free(void *)'),
 
-    // ## **`system.total_ram()`**
+    // ## **`system.totalRam()`**
     // Return total available RAM in bytes.
-    total_ram: ffi('int mgos_get_heap_size()'),
+    totalRam: ffi('int mgos_get_heap_size()'),
 
-    // ## **`system.free_ram()`**
+    // ## **`system.freeRam()`**
     // Return free available RAM in bytes.
-    free_ram: ffi('int mgos_get_free_heap_size()'),
+    freeRam: ffi('int mgos_get_free_heap_size()'),
 
     // ## **`system.reboot(ms)`**
     // Reboot the system after `ms` milliseconds. Return value: none.
@@ -45,8 +45,8 @@ module.exports = {
     // Return value: none.
     usleep: ffi('void mgos_usleep(int)'),
 
-    // ## **`system.wdt_feed()`**
+    // ## **`system.wdtFeed()`**
     // Feed the watchdog timer.
     // Return value: none.
-    wdt_feed: ffi('void mgos_wdt_feed()')
+    wdtFeed: ffi('void mgos_wdt_feed()')
 };

@@ -25,22 +25,23 @@ gpio.enableInterrupt(btnPin);
 gpio.enableInterrupt(snsrPin);
 
 let intCounter = 0;
+let maxInterruptions = 100;
 
 // Run fn every 1 secs & stop after 100 iterations
 let intervalId = setInterval(function() {
     gpio.toggle(ledPin);
 
-    console.log('Device state:', JSON.stringify({
-        uptime: system['uptime'](),
-        free_ram: system['free_ram'](),
-    }));
-
     intCounter++;
-    if (intCounter === 100) {
-        console.log('Got 100 interruptions! Stop interval! Goodbye, world!');
 
-        intCounter = 0;
-
+    if (intCounter === maxInterruptions) {
+        console.log('Got', maxInterruptions, 'interruptions! Stop interval! Goodbye, world!');
         clearInterval(intervalId);
+        return;
     }
+
+    console.log('Device state:', JSON.stringify({
+        uptime: system.uptime(),
+        freeRam: system.freeRam(),
+        stopAfter: maxInterruptions - intCounter,
+    }));
 }, 1000);

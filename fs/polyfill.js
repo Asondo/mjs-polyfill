@@ -1,26 +1,54 @@
-let module = {exports: null};
+// TODO: implement error & warn/debug/stack methods
+let console = {log: print, error: print};
+let module = {exports: null, _cache: {}};
 
 function require(path) {
+    // Prevent duplicate load, return from cache
+    let c = module._cache[path];
+    if (c !== undefined) {
+        return c;
+    }
+
     // noinspection JSUnresolvedFunction
     load(path);
-    // console.log('Load path:', path, JSON.stringify(module.exports));
-    return module.exports;
+
+    // Add module to cache
+    c = module._cache[path] = module.exports;
+    // clean exports data to prevent modules duplication
+    module.exports = undefined;
+
+    return c;
 }
 
-let console = {log: print};
+// Load Timer lib only on demand & cache result
+let __timer = null;
 
-// noinspection JSUnresolvedFunction
-load('api_timer.js');
+function __getTimer() {
+    if (!__timer) {
+        // TODO: add module.export to api_timer & use require with caching
+        // noinspection JSUnresolvedFunction
+        load('api_timer.js');
+
+        __timer = Timer;
+    }
+
+    return __timer;
+}
 
 function setInterval(fn, timeout) {
-    return Timer.set(timeout, Timer.REPEAT, fn, null);
+    let t = __getTimer();
+
+    return t.set(timeout, t.REPEAT, fn, null);
 }
+
 function setTimeout(fn, timeout) {
-    return Timer.set(timeout, 0, fn, null);
+    return __getTimer().set(timeout, 0, fn, null);
 }
+
 function clearTimeout(id) {
-    return Timer.del(id);
+    return __getTimer().del(id);
 }
+
 function clearInterval(id) {
     return clearTimeout(id);
 }
